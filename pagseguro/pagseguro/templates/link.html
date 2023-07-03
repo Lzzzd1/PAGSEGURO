@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>PAGAMENTO</title>
+  <meta content="" name="description">
+  <meta content="" name="keywords">
+  <link href="{{url_for('static', filename='/img/favicon.png')}}" rel="icon">
+  <link href="{{url_for('static', filename='/img/ico.ico')}}" rel="icon">
+  <link href="{{url_for('static', filename='/img/ico.ico')}}" rel="">
+  <link href="{{url_for('static', filename='/img/apple-touch-icon.png')}}" rel="apple-touch-icon">
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Roboto:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+  <link href="{{url_for('static', filename='/vendor/bootstrap/css/bootstrap.min.css')}}" rel="stylesheet">
+  <link href="{{url_for('static', filename='/vendor/boxicons/css/boxicons.min.css')}}" rel="stylesheet">
+  <link href="{{url_for('static', filename='/css/style.css')}}" rel="stylesheet">
+
+<script src="https://assets.pagseguro.com.br/checkout-sdk-js/rc/dist/browser/pagseguro.min.js"></script>
+
+  <script src="https://cdn.jsdelivr.net/npm/brython@3/brython.min.js">
+</script>
+	<script src="https://cdn.jsdelivr.net/npm/brython@3/brython_stdlib.js">
+</script>
+  <script type="text/python" src="/static/scripts/cliente.py"></script>
+  <script src="/static/js/pagamento.js"></script>
+
+  <style>
+
+    #cliente, #end {
+      background: #089ff4;
+      border: 0;
+      padding: 10px 24px;
+      color: #fff;
+      transition: 0.4s;
+      border-radius: 5px;
+    }
+    #cliente:disabled, end:disabled {
+      background: #6c757d;
+      }
+    .entrada {
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+      width: 100%;
+      max-width: 300px;
+    }
+    .entrada:disabled {
+      background-color: rgb(249 249 249 / 61%);
+    }
+    .teste {
+      background: #089ff4;
+      border: 0;
+      padding: 10px 24px;
+      color: #fff;
+      transition: 0.4s;
+      border-radius: 5px;
+      {
+  </style>
+</head>
+<body onload="brython()">
+	<section id="contact" class="contact section-bg">
+		<div class="row justify-content-center">
+        	<div class="col-lg-8">
+          		<div class="page-title home text-center">
+            		<img src="{{url_for('static', filename='/img/OREN BRANCO.png')}}" alt="">
+	  			</div>
+          	<br>
+			<div class="section-title">
+		 		<h2>CONFIRME ALGUNS DADOS
+					<span style="color: #089ff4;">PARA PAGAMENTO</span>
+				</h2>
+				<h2>{{ plano }} - R$ {{ valor }},00</h2>
+		  		<div class="progress">
+					<div class="progress-bar">
+
+					</div>
+				</div>
+			</div>
+
+<div class="row justify-content-center">
+	<div class="sucesso" hidden>
+	<div class="section-title">
+            <h2>Matricula Realizada com Sucesso!</h2>
+          </div>
+		<div class="row justify-content-center">
+
+		<div class="col-lg-8">
+	  <div class="info-box mb-4">
+		<h3 style="color: #089ff4;">Informações Importantes:</h3>
+		<p style="color: white;">Após a confirmação do pagamento, entraremos em contato em até um (1) dia útil para liberar os acessos à plataforma</p>
+	  </div>
+	  </div>
+	  </div>
+</div>
+	<div class="col-lg-10">
+
+		<div class="container" data-aos="fade-up">
+
+			<div class="php-email-form">
+				<div class="info-box mb-4"><br>
+					<div class="cliente">
+						<form onsubmit="return false" id="cli_form">
+							<h3 style="color: #fff">Seus dados pessoais
+							</h3>
+							<br>
+						{% for campo in cli_form %}
+						<div class="" >
+<!--							<input class="entrada form-control text-center" id="nome" type="text" placeholder="Nome Completo" required>-->
+							{{ campo(class="entrada form-control text-center", placeholder=campo.label.text, id=campo.name) }}
+						</div>
+						<br>
+							{% endfor %}
+						</form>
+					</div>
+				<div class="endereco" hidden>
+					<h3 style="color: #fff">Seu endereço
+					</h3>
+					<br>
+					{% for campo in end_form %}
+					<div class="" >
+<!--						<input class="entrada form-control text-center" type="text" id="cep" maxlength="9" placeholder="CEP" autofocus>-->
+						{{ campo(class="entrada form-control text-center", placeholder=campo.label.text) }}
+					</div>
+					<br>
+					{% endfor %}
+				</div>
+			</form>
+
+					<input id="cliente" type="submit" value="Próximo">
+					<input type="text" id="key" value="{{ key }}" hidden disabled >
+					<div class="menus">
+					<button id="cartao" type="submit" hidden>CARTÃO</button>
+					<button id="boleto" type="submit" hidden>BOLETO</button>
+					<button class="teste" id="pix" type="submit" hidden>PIX</button>
+						</div>
+					<br>
+
+					<div class="pagamento_boleto" hidden>
+					<img id="carregarb" src="{{ url_for('static', filename='img/carregando.gif') }}" hidden>
+						<div class="avisob">
+						<h3 style="color: #089ff4;">ATENÇÃO A ESTES DETALHES:</h3>
+						<ul style="color: white;">
+						<li>Apenas à vista;</li>
+<li>Os pagamentos levam até 3 dias úteis para serem compensados e então terem os produtos liberados;</li>
+<li>Fique atento(a) à data de vencimento. Pode pagar em qualquer banco ou casa lotérica até o vencimento.</li>
+						</ul>
+					<button id="bboleto" type="submit">GERAR</button>
+						</div>
+					</div>
+
+
+					<div class="pagamento_pix" hidden>
+					<img id="carregar" src="{{ url_for('static', filename='img/carregando.gif') }}" hidden>
+						<div class="aviso">
+						<h3 style="color: #089ff4;">ATENÇÃO A ESTES DETALHES:</h3>
+						<ul style="color: white;">
+						<li>Somente à vista;</li>
+<li>O(s) produto(s) será(ão) liberado(s) somente após recebermos a confirmação de pagamento;</li>
+							<li>Fique atento(a) à data de vencimento. Após a expiração, será necessário refazer seu pedido.</li>
+</ul>
+</div>
+					<button id="bpix" type="submit">GERAR</button>
+					</div>
+
+					<div class="pagamento_cartao" id="card" hidden>
+					<div class="" >
+						<input class="entrada form-control text-center" id="holder" name="holder" type="text" placeholder="Nome no cartão" required>
+					</div>
+						<br>
+						<div class="" >
+							<input class="entrada form-control text-center" id="ncartao" type="text" maxlength="19" placeholder="Número do Cartão" required>
+						</div>
+						<br>
+						<div class="">
+							<input class="entrada form-control text-center" id="cvv" name="cvv" type="text" placeholder="CVV" maxlength="4" required>
+						</div>
+						<br>
+						<div class="datas">
+						<div class="mes" >
+							<input class="entrada form-control text-center" id="mesvencimento" type="text" min="0" max="12"
+								   maxlength="2" placeholder="Mês" required>
+						</div><br>
+						<div class="datas" >
+							<input class="entrada form-control text-center" id="anovencimento" type="text"  maxlength="4" placeholder="Ano" required>
+						</div>
+
+							</div>
+						<br>
+						<br>
+						<select id="parcelas" style="width: 510px;" class="entrada form-control text-center" required>
+                          <option value="" selected>Selecione a quantidade de parcelas</option>
+							{% for i in parcelas %}
+                          <option value="{{loop.index}}">{{loop.index}}x - {{ "R${:,.2f}".format(i) }}</option>
+                        	{% endfor %}
+						</select>
+						<br>
+					<button id="bcartao" type="submit" onclick="get_crypt()">PAGAR</button>
+					<img id="carregarc" src="{{ url_for('static', filename='img/carregando.gif') }}" hidden>
+
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+</div>
+</div>
+</section>
+	<script src="https://code.jquery.com/jquery-3.0.0.min.js"></script>
+	<script>
+			/*
+			 * Para efeito de demonstração, o JavaScript foi
+			 * incorporado no arquivo HTML.
+			 * O ideal é que você faça em um arquivo ".js" separado. Para mais informações
+			 * visite o endereço https://developer.yahoo.com/performance/rules.html#external
+			 */
+
+			// Registra o evento blur do campo "cep", ou seja, a pesquisa será feita
+			// quando o usuário sair do campo "cep"
+			$("#cep").blur(function(){
+				// Remove tudo o que não é número para fazer a pesquisa
+				var cep = this.value.replace(/[^0-9]/, "");
+
+				// Validação do CEP; caso o CEP não possua 8 números, então cancela
+				// a consulta
+				if(cep.length != 8){
+					return false;
+				}
+
+				// A url de pesquisa consiste no endereço do webservice + o cep que
+				// o usuário informou + o tipo de retorno desejado (entre "json",
+				// "jsonp", "xml", "piped" ou "querty")
+				var url = "https://viacep.com.br/ws/"+cep+"/json/";
+
+				// Faz a pesquisa do CEP, tratando o retorno com try/catch para que
+				// caso ocorra algum erro (o cep pode não existir, por exemplo) a
+				// usabilidade não seja afetada, assim o usuário pode continuar//
+				// preenchendo os campos normalmente
+				$.getJSON(url, function(dadosRetorno){
+					try{
+						// Preenche os campos de acordo com o retorno da pesquisa
+						$("#endereco").val(dadosRetorno.logradouro);
+						$("#bairro").val(dadosRetorno.bairro);
+						$("#cidade").val(dadosRetorno.localidade);
+						$("#uf").val(dadosRetorno.uf);
+					}catch(ex){}
+				});
+			});
+		</script>
+	<script src="{{url_for('static', filename='/vendor/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
+</body>
+</html>

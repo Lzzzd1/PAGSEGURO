@@ -1,0 +1,17 @@
+[tool.poetry]
+name = "pagseguro"
+version = "0.1.0"
+description = "integração pagseguro"
+authors = ["Your Name <you@example.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+flask = "^2.3.2"
+flask-wtf = "^1.1.1"
+requests = "^2.31.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
