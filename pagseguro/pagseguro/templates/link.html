@@ -297,7 +297,7 @@
   }
   </style>
 </head>
-<body onload="brython()">
+<body onload="brython()" style="background-image: {{url_for('static', filename='/img/menina.webp')}}" >
 	<section id="contact" class="contact section-bg">
 		<div class="plano-cliente">
             <div class="compra-segura">
@@ -462,7 +462,7 @@
 </div>
 </div>
 <div class="footer">
-    <img src="./assets/img/selo-garantia.webp" alt="Certificado" width="100" height="100">
+    <img {{url_for('static', filename='/img/selo-garantia.webp')}} alt="Certificado" width="100" height="100">
     <br>
     <p style="text-align: center; color: white;" >Oren Educacional 2023 – CNPJ: 47.286.650/0001-09</8>
 </div>
