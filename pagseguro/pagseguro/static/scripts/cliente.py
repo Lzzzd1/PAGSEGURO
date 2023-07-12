@@ -11,17 +11,19 @@ def on_complete(req):
 
 def validar_campos(campos):
     if not all(i.value for i in campos):
-        for campo in campos:
-            p = campo.parent.select_one('small')
-            campo.style.borderColor = '#0854fe'
-            if p:
+        erros = document.select('.erro')
+        if erros:
+            for p in erros:
                 p.remove()
+        for campo in campos:
+            
+            campo.style.borderColor = '#0854fe'
             if not campo.value:
                 campo.style.borderColor = 'red'
                 # noinspection PyStatementEffect
-                campo.parent <= SMALL(
-                    f'O campo ' + SPAN(campo.placeholder.lower(), style={"color": "#0854fe"}) + ' é obrigatório',
-                    style={"color": "white"})
+                campo.parent <= DIV( BR() + SMALL(
+                    f'O campo ' + SPAN(campo.placeholder.lower(), style={"color": "red"}) + ' é obrigatório',
+                    style={"color": "white"}), Class = "erro" )
         return False
     # valores = [{'nome': i.id, 'valor': i.value} for i in campos]
     # for dados in valores:
@@ -42,7 +44,7 @@ def on_completar_envio(req):
 
 @bind(document['cliente'], 'click')
 def cli(evt):
-    campos = document.select('.cliente input')
+    campos = document.select('.cliente input:not([type="submmit"])')
 
     if not validar_campos(campos):
         return None
@@ -54,7 +56,7 @@ def cli(evt):
 
     document.select_one('.cliente').hidden = True
     document.select_one('.endereco').hidden = False
-    document.select_one('.progress-bar').style['width'] = '33%'
+    document['clii'].class_name = 'bx bx-check-circle'
     evt.currentTarget.id = 'end'
 
     @bind(document['end'], 'click')
@@ -62,7 +64,7 @@ def cli(evt):
         campos = document.select('.endereco input')
         if not validar_campos(campos):
             return None
-        document.select_one('.progress-bar').style['width'] = '80%'
+        document['endi'].class_name = 'bx bx-check-circle'
         document.select_one('.endereco').hidden = True
         evt.currentTarget.hidden = True
         document['cartao'].hidden = False
@@ -74,11 +76,11 @@ def cli(evt):
 @bind(document['cpf'], 'input')
 def validar_cpf(evt):
     cpf = evt.currentTarget.value
-    if p := evt.currentTarget.parent.select_one('small'):
+    if p := evt.currentTarget.parent.parent.select_one('small'):
         p.remove()
     # Verifica a formatação do CPF
     if not re.match(r'\d{3}.?\d{3}.?\d{3}-?\d{2}', cpf):
-        evt.currentTarget.parent <= SMALL('CPF inválido', style={"color": "red"})
+        evt.currentTarget.parent.parent <= SMALL('CPF inválido', style={"color": "red"})
         document['cliente'].disabled = True
         return None
 
@@ -87,7 +89,7 @@ def validar_cpf(evt):
 
     # Verifica se o CPF possui 11 números ou se todos são iguais:
     if len(numbers) != 11 or len(set(numbers)) == 1:
-        evt.currentTarget.parent <= SMALL('CPF inválido', style={"color": "red"})
+        evt.currentTarget.parent.parent <= SMALL('CPF inválido', style={"color": "red"})
         document['cliente'].disabled = True
         return None
     document['cliente'].disabled = False
@@ -97,10 +99,10 @@ def validar_cpf(evt):
 @bind(document['email'], 'input')
 def validar_email(evt):
     email = evt.currentTarget.value
-    if p := evt.currentTarget.parent.select_one('small'):
+    if p := evt.currentTarget.parent.parent.select_one('small'):
         p.remove()
     if not re.match(r'([A-Za-z0-9]+[.-_])*[A-Za-z0-9]+@[A-Za-z0-9-]+(\.[A-Z|a-z]{2,})+', email):
-        evt.currentTarget.parent <= SMALL('Email inválido', style={"color": "red"})
+        evt.currentTarget.parent.parent <= SMALL('Email inválido', style={"color": "red"})
         document['cliente'].disabled = True
         return None
     document['cliente'].disabled = False
@@ -109,12 +111,12 @@ def validar_email(evt):
 @bind(document['telefone'], 'input')
 def validar_telefone(evt):
     telefone = evt.currentTarget.value
-    if p := evt.currentTarget.parent.select_one('small'):
+    if p := evt.currentTarget.parent.parent.select_one('small'):
         p.remove()
     if not re.match(
             r'^(55)?\(?(?:[14689][1-9]|2[12478]|3[1234578]|5[1345]|7[134579])\)? ?(?:[2-8]|9[1-9])[0-9]{3}\-?[0-9]{4}$',
             telefone):
-        evt.currentTarget.parent <= SMALL('Telefone inválido', style={"color": "red"})
+        evt.currentTarget.parent.parent <= SMALL('Telefone inválido', style={"color": "red"})
         document['cliente'].disabled = True
         return None
     document['cliente'].disabled = False
@@ -189,7 +191,7 @@ def testar(req):
         if resposta['charges'][0]['status'] == 'PAID':
             document.select_one('.col-lg-10').hidden = True
             document.select_one('.sucesso').hidden = False
-            document.select_one('.progress-bar').style['width'] = '100%'
+            document['pagi'].class_name = 'bx bx-check-circle'
         else:
             print(resposta['charges'][0]['status'])
             raise Exception()
@@ -250,4 +252,4 @@ def mudar_texto():
 # def endo(evt):
 #     document.select_one('.endereco').hidden = True
 #     document.select_one('.pagemento cartao').hidden = False
-#     evt.currentTarget.id = 'end'
+#     evt.currentTarget.id = 'end'

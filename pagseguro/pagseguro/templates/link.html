@@ -27,56 +27,53 @@
   <style>
 
     #cliente, #end {
-      background: #089ff4;
       border: 0;
       padding: 10px 24px;
       color: #fff;
       transition: 0.4s;
       border-radius: 5px;
+      background-color: #0e5b88;
     }
     #cliente:disabled, end:disabled {
       background: #6c757d;
       }
     .entrada {
-      display: block;
+      display: inline-block;
       margin-left: auto;
       margin-right: auto;
       width: 100%;
       max-width: 300px;
     }
-    .entrada:disabled {
-      background-color: rgb(249 249 249 / 61%);
-    }
-    .teste {
-      background: #089ff4;
-      border: 0;
-      padding: 10px 24px;
-      color: #fff;
-      transition: 0.4s;
-      border-radius: 5px;
-      {
   </style>
 </head>
-<body onload="brython()">
+<body onload="brython()" style="background-color: white;">
 	<section id="contact" class="contact section-bg">
 		<div class="row justify-content-center">
         	<div class="col-lg-8">
           		<div class="page-title home text-center">
-            		<img src="{{url_for('static', filename='/img/OREN BRANCO.png')}}" alt="">
+            		<img src="{{url_for('static', filename='/img/OREN PRETO.png')}}" alt="">
 	  			</div>
           	<br>
 			<div class="section-title">
-		 		<h2>CONFIRME ALGUNS DADOS
+		 		<h2 style="color: black;">CONFIRME ALGUNS DADOS
 					<span style="color: #089ff4;">PARA PAGAMENTO</span>
 				</h2>
-				<h2>{{ plano }} - R$ {{ valor }},00</h2>
-		  		<div class="progress">
-					<div class="progress-bar">
-
-					</div>
-				</div>
-			</div>
-
+				<h2 style="color: black;">{{ plano }} - R$ {{ valor }},00</h2>
+        <div class="plano-cliente">
+          <div class="compra-segura">
+            
+          <h5 style="font-size: 1,5em; color: white;"> <i class='bx bxs-lock'></i> Compra Segura</h4>
+          </div>
+          <br>
+          <h5>Resumo da compra</h5>
+          <div class="divisor"></div>
+          <div class="valor-produto">
+              <i class="bx bxs-cart"></i>
+              <p>Valor do Produto</p>
+          </div>
+          <div class="divisor"></div><br>
+          <h4 style="color: white;">{{ plano }} - R$ {{ valor }},00</h4>
+  </div>
 <div class="row justify-content-center">
 	<div class="sucesso" hidden>
 	<div class="section-title">
@@ -98,37 +95,67 @@
 
 			<div class="php-email-form">
 				<div class="info-box mb-4"><br>
-					<div class="cliente">
-						<form onsubmit="return false" id="cli_form">
-							<h3 style="color: #fff">Seus dados pessoais
-							</h3>
-							<br>
-						{% for campo in cli_form %}
-						<div class="" >
+          <div class="icon-container">
+              <div class="info1">
+                <i class='bx bx-circle' style="color: white;" id="clii"></i>
+                <br>
+               <smal style="color: white;"  >Contato</small>
+              </div>
+            <hr>
+            <div class="info1">
+              <i class='bx bx-circle' style="color: white;" id="endi"></i>
+              <br>
+             <small style="color: white;" >Endereço</small>
+            </div>
+            <hr>
+            <div class="info1">
+              <i class='bx bx-circle' style="color: white;" id="pagi"></i>
+              <br>
+             <small style="color: white;" >Pagamento</small>
+            </div>
+          </div>
+            <div class="cliente">
+
+              <form onsubmit="return false" id="cli_form">
+                <h3 style="color: #fff">Seus dados pessoais
+                </h3>
+                <br>
+              {% for campo in cli_form %}
+              {% if loop.index % 2 != 0 %}
+              <div class="form-group" >
 <!--							<input class="entrada form-control text-center" id="nome" type="text" placeholder="Nome Completo" required>-->
 							{{ campo(class="entrada form-control text-center", placeholder=campo.label.text, id=campo.name) }}
+
+              {% else %}
+              {{ campo(class="entrada form-control text-center", placeholder=campo.label.text, id=campo.name) }}
 						</div>
 						<br>
+            {% endif %}
 							{% endfor %}
 						</form>
 					</div>
+        </div>
 				<div class="endereco" hidden>
 					<h3 style="color: #fff">Seu endereço
 					</h3>
 					<br>
 					{% for campo in end_form %}
-					<div class="" >
+          {% if loop.index % 2 != 0 %}
+					<div class="form-group" >
 <!--						<input class="entrada form-control text-center" type="text" id="cep" maxlength="9" placeholder="CEP" autofocus>-->
 						{{ campo(class="entrada form-control text-center", placeholder=campo.label.text) }}
-					</div>
+					{% else %}
+          {{ campo(class="entrada form-control text-center", placeholder=campo.label.text) }}
+        </div>
 					<br>
+          {% endif %}
 					{% endfor %}
 				</div>
 			</form>
 
 					<input id="cliente" type="submit" value="Próximo">
 					<input type="text" id="key" value="{{ key }}" hidden disabled >
-					<div class="menus">
+					<br><div class="menus">
 					<button id="cartao" type="submit" hidden>CARTÃO</button>
 					<button id="boleto" type="submit" hidden>BOLETO</button>
 					<button class="teste" id="pix" type="submit" hidden>PIX</button>
@@ -138,7 +165,7 @@
 					<div class="pagamento_boleto" hidden>
 					<img id="carregarb" src="{{ url_for('static', filename='img/carregando.gif') }}" hidden>
 						<div class="avisob">
-						<h3 style="color: #089ff4;">ATENÇÃO A ESTES DETALHES:</h3>
+						<h3 style="color: white;">ATENÇÃO A ESTES DETALHES:</h3>
 						<ul style="color: white;">
 						<li>Apenas à vista;</li>
 <li>Os pagamentos levam até 3 dias úteis para serem compensados e então terem os produtos liberados;</li>
@@ -152,13 +179,13 @@
 					<div class="pagamento_pix" hidden>
 					<img id="carregar" src="{{ url_for('static', filename='img/carregando.gif') }}" hidden>
 						<div class="aviso">
-						<h3 style="color: #089ff4;">ATENÇÃO A ESTES DETALHES:</h3>
+						<h3 style="color: white;">ATENÇÃO A ESTES DETALHES:</h3>
 						<ul style="color: white;">
 						<li>Somente à vista;</li>
 <li>O(s) produto(s) será(ão) liberado(s) somente após recebermos a confirmação de pagamento;</li>
 							<li>Fique atento(a) à data de vencimento. Após a expiração, será necessário refazer seu pedido.</li>
 </ul>
-</div>
+</div><BR>
 					<button id="bpix" type="submit">GERAR</button>
 					</div>
 
@@ -190,10 +217,15 @@
 						<select id="parcelas" style="width: 510px;" class="entrada form-control text-center" required>
                           <option value="" selected>Selecione a quantidade de parcelas</option>
 							{% for i in parcelas %}
-                          <option value="{{loop.index}}">{{loop.index}}x - {{ "R${:,.2f}".format(i) }}</option>
-                        	{% endfor %}
+                             {% if loop.index > 1 %}
+                          <option value="{{loop.index}}">{{loop.index}}x - {{ "R${:,.2f}".format(i) }} - COM JUROS</option>
+                            {% else %}            
+                          <option value="{{loop.index}}">{{loop.index}}x - {{ "R${:,.2f}".format(i) }} - SEM JUROS</option>     
+                              {% endif %}                 
+                              {% endfor %}
 						</select>
 						<br>
+            <br>
 					<button id="bcartao" type="submit" onclick="get_crypt()">PAGAR</button>
 					<img id="carregarc" src="{{ url_for('static', filename='img/carregando.gif') }}" hidden>
 
@@ -206,6 +238,18 @@
 </div>
 </div>
 </section>
+
+<footer>
+<div class="footer">
+    <img src="{{url_for('static', filename='/img/selo-garantia.webp')}}"  alt="Certificado" width="100" height="100">
+    <img src="{{url_for('static', filename='/img/selo2branco.png')}}"  alt="Certificado" width="100" height="100">
+    <br>
+    <br>
+
+    <p style="text-align: center; color: white;" >Oren Educacional 2023 – CNPJ: 47.286.650/0001-09</8>
+
+</div>
+</footer>
 	<script src="https://code.jquery.com/jquery-3.0.0.min.js"></script>
 	<script>
 			/*

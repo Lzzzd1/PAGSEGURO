@@ -1,6 +1,6 @@
 from flask import Flask
-from .trad import configure as trad_config
-from .emer import configure as emer_config
+from trad import configure as trad_config
+from emer import configure as emer_config
 
 
 def create_app():

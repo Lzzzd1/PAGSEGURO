@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, request
 from integracao.requisition import get_key, gerar_boleto, gerar_pix, gerar_cartao
 from forms import ClienteForm, EnderecoForm
-from pagseguro.integracao.utils import calcular_juros, calcular_parcelas
+from integracao.utils import calcular_juros, calcular_parcelas
 
 trad = Blueprint('trad', __name__)
 

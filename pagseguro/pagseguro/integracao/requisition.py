@@ -1,4 +1,4 @@
-from pagseguro.integracao.utils import calcular_juros
+from .utils import calcular_juros
 
 import datetime
 
@@ -6,12 +6,12 @@ import requests
 
 headers = {
     "Content-type": "application/json",
-    "Authorization": "Bearer B3BC2839DB814D8EA24C869035E1DEB3"
+    "Authorization": "Bearer 6ee5007d-70e3-44f4-8c02-45097280bbedee9a1efc4248998af76e991bc9e9d3b56957-092d-4765-a787-7c30ea5b3dee"
 }
 
 
 def get_key():
-    url = "https://sandbox.api.pagseguro.com/public-keys"
+    url = "https://api.pagseguro.com/public-keys"
 
     body = {'type': 'card'}
 
@@ -97,7 +97,7 @@ def gerar_boleto(valor, **kwargs):
         ]
     }
 
-    resposta = requests.post('https://sandbox.api.pagseguro.com/orders', json=body, headers=headers)
+    resposta = requests.post('https://api.pagseguro.com/orders', json=body, headers=headers)
     print(body)
     return resposta.json()
 
@@ -151,7 +151,7 @@ def gerar_pix(valor, **kwargs):
             ]
 
             }
-    resposta = requests.post('https://sandbox.api.pagseguro.com/orders', json=body, headers=headers)
+    resposta = requests.post('https://api.pagseguro.com/orders', json=body, headers=headers)
     return resposta.json()
 
 
@@ -220,7 +220,7 @@ def gerar_cartao(valor, **kwargs):
             }
         ]
     }
-    resposta = requests.post('https://sandbox.api.pagseguro.com/orders', json=body, headers=headers)
+    resposta = requests.post('https://api.pagseguro.com/orders', json=body, headers=headers)
     print(resposta.text)
     print(kwargs.get('encrypted'))
     return resposta.json()
